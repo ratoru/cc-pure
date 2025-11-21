@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__zig-docs__search_std_lib",
+      "mcp__zig-docs__get_std_lib_item",
+      "Bash(zig build:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

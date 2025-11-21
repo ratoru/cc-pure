@@ -1,0 +1,48 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build-assets:
+    strategy:
+      matrix:
+        include:
+          - target: x86_64-linux
+            os: ubuntu-latest
+          - target: aarch64-macos
+            os: macos-latest
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: mlugg/setup-zig@v2
+
+      - name: Build
+        run: zig build -Dtarget=${{ matrix.target }} -Doptimize=ReleaseSafe
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v5
+        with:
+          name: cc-pure-${{ matrix.target }}
+          path: zig-out/bin/
+
+  create-release:
+    needs: build-assets
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v6
+
+      - name: Create zip archives
+        run: |
+          zip -j cc-pure-x86_64-linux.zip cc-pure-x86_64-linux/cc_pure
+          zip -j cc-pure-aarch64-macos.zip cc-pure-aarch64-macos/cc_pure
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          files: cc-pure-*
