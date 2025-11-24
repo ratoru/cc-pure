@@ -31,6 +31,14 @@ user/projects/myapp main* ⇣⇡ +20 -81 34,040 (79%)
 
 ## Installation
 
+```bash
+just install
+```
+
+<details>
+
+<summary>Manual install</summary>
+
 Build the binary and move it to `~/.claude/cc_pure`.
 
 ```bash
@@ -48,6 +56,8 @@ Add this to your `~/.claude/settings.json`:
   }
 }
 ```
+
+</details>
 
 ### Themes
 
