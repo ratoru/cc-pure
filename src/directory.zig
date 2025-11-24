@@ -163,6 +163,8 @@ test "simplify with relative path" {
 test "simplify handles irrelevant HOME variable" {
     const result = simplify("home/user/projects/myapp", "/s/d/f");
     try std.testing.expectEqualStrings("user/projects/myapp", result);
+    const result2 = simplify("home/user/projects/myapp", "/home/user2/");
+    try std.testing.expectEqualStrings("user/projects/myapp", result2);
 }
 
 test "simplify handles HOME without slash" {
