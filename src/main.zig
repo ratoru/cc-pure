@@ -54,7 +54,7 @@ pub fn main() !void {
     const raw_bytes = try stdin.takeDelimiterExclusive('\n');
     const bytes = try input_arena.allocator().dupe(u8, raw_bytes);
 
-    const parsed = try cc_pure.Session.parse(input_arena.allocator(), bytes);
+    const parsed = try cc_pure.claude.parse(input_arena.allocator(), bytes);
     const session = parsed.value;
 
     // Now that we have 'session', we can spawn the usage calculator
@@ -81,7 +81,7 @@ fn fetchGit(ctx: *GitContext) void {
     ctx.repo = cc_pure.git_status.fetch_repository(alloc);
 }
 
-fn calcUsage(ctx: *UsageContext, session: cc_pure.Session.Session) void {
+fn calcUsage(ctx: *UsageContext, session: cc_pure.claude.Session) void {
     const alloc = ctx.arena.allocator();
     const usage_tracker = cc_pure.usage.Tracker.init(.{});
 

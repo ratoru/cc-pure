@@ -11,7 +11,7 @@ var chunk: [32]u8 = undefined;
 
 /// Formats the status line and prints it to the given writer.
 /// Example: Terraform/modules/substation main* ⇣⇡ @34,040 (79%) #9 +20 -81 3m1s
-pub fn format(writer: anytype, session: claude.claude, repo: ?*const git_status.Repository, snapshot: ?usage.Snapshot) !void {
+pub fn format(writer: anytype, session: claude.Session, repo: ?*const git_status.Repository, snapshot: ?usage.Snapshot) !void {
     // Precondition: session must have a non-empty cwd.
     assert(session.cwd.len > 0);
 
@@ -24,7 +24,8 @@ pub fn format(writer: anytype, session: claude.claude, repo: ?*const git_status.
 }
 
 fn formatCwd(writer: anytype, cwd: []const u8) !void {
-    const simplified = directory.simplify(cwd);
+    const home_env = std.posix.getenv("HOME");
+    const simplified = directory.simplify(cwd, home_env);
 
     try theme.write(theme.active_config, writer, .{ .directory = simplified });
 }
